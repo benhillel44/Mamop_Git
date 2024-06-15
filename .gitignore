@@ -1,0 +1,5 @@
+measurements/extracted_measurements/*
+measurements/measurements_zips/*
+measurements/fit_graphs/*
+measurements/measurements_csv/*
+.idea

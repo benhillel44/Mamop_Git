@@ -5,6 +5,7 @@ from scipy.optimize import curve_fit, fmin
 import math
 from os import listdir
 import os
+import constants
 
 
 
@@ -42,8 +43,7 @@ def proccess_data(data, filename, csv_path):
     sin_paramsA = fit_sin(x, channelA)
     sin_paramsB = fit_sin(x, channelB)
 
-    output_graph = False
-    if output_graph:
+    if save_sin_fit_graphs:
         plt.scatter(x, channelA, s=10)
         plt.scatter(x, channelB, s=10)
         plt.plot(x, sin_paramsA["fitfunc"](x), color='green')
@@ -51,7 +51,8 @@ def proccess_data(data, filename, csv_path):
         plt.title(f'{filename}')
         # plt.show()
         plt.savefig(f'{filename}.png') #_freqA_{sin_paramsA['freq']}_freqB_{sin_paramsB['freq']}
-        plt.close()
+        plt.clf()
+
 
     sin_paramsA.pop('fitfunc')
     sin_paramsB.pop('fitfunc')
@@ -72,17 +73,17 @@ def proccess_data(data, filename, csv_path):
 
 
 def main(file_input_dir, csv_output_dir, graph_output_dir):
-    csv_name = f'{file_input_dir}.csv'
+    csv_name = f'{file_input_dir.split("/")[-1]}.csv'
     # create the directory if it does not exist
     if not os.path.exists(graph_output_dir):
         os.makedirs(graph_output_dir)
 
     df_data_total = []
 
-    files = listdir(file_dir)
+    files = listdir(file_input_dir)
     for file in files:
         if file.endswith('.csv'):
-            data = pd.read_csv(f'{file_dir}/{file}')
+            data = pd.read_csv(f'{file_input_dir}/{file}')
 
             # remove the first row from data
             data = data.iloc[2:202]
@@ -115,10 +116,20 @@ def main(file_input_dir, csv_output_dir, graph_output_dir):
     df_data_total = pd.concat(df_data_total, ignore_index=True)
     df_data_total.to_csv(f'{csv_output_dir}/{csv_name}')
 
+def run_fit_sin(measurement_):
+    file_dir_ = constants.PATH_TO_EXTRACTED_MEASUREMENTS + f'measurement_{measurement_}'
+    graph_dir_ = constants.PATH_TO_FIT_GRAPHS
+    csv_dir_ = constants.PATH_TO_MEASUREMENT_CSV
+    main(file_dir_, csv_dir_, graph_dir_)
 
 if __name__ == "__main__":
-    file_dir = 'measurement_6'
-    csv_dir = 'csv_files'
-    graph_dir = f'graphs\\{file_dir}'
+    # ======= you can modify the parameters bellow
+    measurement = 3
+    save_sin_fit_graphs = False
+    # ============================================
+
+    file_dir = constants.PATH_TO_EXTRACTED_MEASUREMENTS + f'measurement_{measurement}'
+    graph_dir = constants.PATH_TO_FIT_GRAPHS
+    csv_dir = constants.PATH_TO_MEASUREMENT_CSV
     main(file_dir, csv_dir, graph_dir)
 
