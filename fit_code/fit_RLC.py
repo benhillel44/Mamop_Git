@@ -117,15 +117,21 @@ def main(filename):
     print(f">> Covariances \nCov(R_L,R_L)={covariance[0,0]}\n"
           f"Cov(R_L,L)={covariance[0,1]}\nCov(L,L)={covariance[1,1]}")
 
+    # text displaying the values on the graph
+    display_values = (f"R_L = {R_L:.1e} ± {covariance[0,0]:.1e} [Ohm]\n"
+                      f"L = {L:.1e} ± {covariance[1,1]:.1e} [Henry]\n"
+                      f"C_L = {C_L:.1e} ± {LC / covariance[1,1]:.1e} [Farad]")
+
     # Plotting the data and the fitted curve
-    plt.scatter(x_data, y_data, color='red', label='Data Points')
+    plt.scatter(x_data, y_data, color='red', label='measurements')
     x_model = np.linspace(min(x_data), max(x_data), 100)
     y_model = RCL_model(x_model, R_L, L, C_L)
     plt.plot(x_model, y_model, label='Fitted Curve')
-    plt.xlabel('x')
-    plt.ylabel('y')
-    plt.title('Curve Fitting')
+    plt.xlabel("Frequency [Hz]")
+    plt.ylabel("Voltage [V]")
+    plt.title(f"Voltage vs Frequency over one coil, ratio (V_A / V_B)")
     plt.legend()
+    plt.figtext(0.15, 0.7, display_values, fontsize=10, bbox={"facecolor": "white", "alpha": 0.5, "pad": 5})
     plt.show()
 
 if __name__ == '__main__':
