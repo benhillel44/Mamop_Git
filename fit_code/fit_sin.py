@@ -35,10 +35,10 @@ def fit_sin(tt, yy):
     return {"amp": A, "omega": w, "phase": p, "offset": c, "freq": f, "period": 1./f, "fitfunc": fitfunc, "maxcov": np.max(pcov), "rawres": (guess,popt,pcov)}
 
 
-def proccess_data(data, filename, csv_path):
+def proccess_data(data, filename, csv_path, is_channelA_milli=False, is_channelB_milli=False):
     x = data['Time'].astype(float)
-    channelA = data['Channel A'].astype(float)
-    channelB = data['Channel B'].astype(float)
+    channelA = data['Channel A'].astype(float) / 1000 if is_channelA_milli else data['Channel A'].astype(float)
+    channelB = data['Channel B'].astype(float) / 1000 if is_channelB_milli else data['Channel B'].astype(float)
 
     sin_paramsA = fit_sin(x, channelA)
     sin_paramsB = fit_sin(x, channelB)
@@ -72,7 +72,8 @@ def proccess_data(data, filename, csv_path):
 
 
 
-def main(file_input_dir, csv_output_dir, graph_output_dir):
+def main(file_input_dir, csv_output_dir, graph_output_dir,
+         is_channelA_milli=False, is_channelB_milli=False):
     csv_name = f'{file_input_dir.split("/")[-1]}.csv'
     # create the directory if it does not exist
     if not os.path.exists(graph_output_dir):
@@ -88,7 +89,9 @@ def main(file_input_dir, csv_output_dir, graph_output_dir):
             # remove the first row from data
             data = data.iloc[2:202]
             try:
-                sin_paramsA, sin_paramsB = proccess_data(data, f'{graph_output_dir}\\{file[:-4]}', f'{csv_dir}/{csv_name}')
+                sin_paramsA, sin_paramsB = proccess_data(data, f'{graph_output_dir}\\{file[:-4]}', f'{csv_dir}/{csv_name}'
+                                                         , is_channelA_milli=is_channelA_milli
+                                                         , is_channelB_milli=is_channelB_milli)
                 sin_paramsA.update(sin_paramsB)
             except:
                 print(f'Error with file {file}')
@@ -124,12 +127,16 @@ def run_fit_sin(measurement_):
 
 if __name__ == "__main__":
     # ======= you can modify the parameters bellow
-    measurement = 3
+    measurement = 11
     save_sin_fit_graphs = False
+    is_channelA_milli = True
+    is_channelB_milli = False
     # ============================================
 
     file_dir = constants.PATH_TO_EXTRACTED_MEASUREMENTS + f'measurement_{measurement}'
     graph_dir = constants.PATH_TO_FIT_GRAPHS
     csv_dir = constants.PATH_TO_MEASUREMENT_CSV
-    main(file_dir, csv_dir, graph_dir)
+    main(file_dir, csv_dir, graph_dir,
+         is_channelA_milli=is_channelA_milli,
+         is_channelB_milli=is_channelB_milli)
 
