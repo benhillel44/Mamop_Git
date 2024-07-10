@@ -5,7 +5,7 @@ import numpy as np
 import plotly.graph_objs as go
 from utils import fft, ifft, LPF, HPF, plot
 from numpy import pi
-from demodulator import *
+
 
 def load_data(path_to_csv) -> pd.DataFrame:
     df = pd.read_csv(path_to_csv)
@@ -51,16 +51,17 @@ def envelope_detection(t, x, f_0) -> (np.ndarray, np.ndarray):
     return t, x
 
 
-def main() :
-    df_data = load_data('../data/H.csv')
-    F_0 = 600
-    plot(x=df_data['Time'], y=df_data['Channel A'], title='Raw Signal Data')
+def run_preprocess(path_to_csv: str, f_0: float) -> (np.ndarray, np.ndarray):
+    df_data = load_data(path_to_csv)
+    F_0 = f_0
+    # plot(x=df_data['Time'], y=df_data['Channel A'], title='Raw Signal Data')
 
     t, x = denoise(df_data)
 
-    t, x = envelope_detection(t, x, F_0)
+    # t, x = envelope_detection(t, x, F_0)
 
-    plot(x=t, y=np.abs(x), title='After envelope detection')
+    # plot(x=t, y=np.abs(x), title='After envelope detection')
+    return t, x
 
 if __name__ == '__main__':
-    main()
+    run_preprocess('../data/H.csv', 600)
