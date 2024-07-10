@@ -42,24 +42,29 @@ def denoise(df: pd.DataFrame) -> (np.ndarray, np.ndarray):
 
     return t, denoised_x
 
-
-def envelope_detection(t, x, f_0) -> (np.ndarray, np.ndarray):
+def hetrodine_detection(t, x, f_0) -> (np.ndarray, np.ndarray):
     # multiply the signal by sin(f_0t)
     x *= np.sin(2*pi*f_0*t)
     t, x = LPF(t, x, f_0)
 
     return t, x
 
+def envelope_detection(t, x, f_0) -> (np.ndarray, np.ndarray):
+    # in a more - Aravy way
+    sample_freq = 1 / (t[100] - t[99])
+    n_points_AOI = int(1/((1/f_0 - 1/sample_freq)*2*pi))
+    print(f">> preforming Arabic envelope detection with local maxima of {n_points_AOI} points")
+    x_AOF_maximums = np.array([np.max(x[i:i + n_points_AOI]) for i in range(0, len(x) - n_points_AOI)])
+
+    return t, x_AOF_maximums
+
 
 def run_preprocess(path_to_csv: str, f_0: float) -> (np.ndarray, np.ndarray):
     df_data = load_data(path_to_csv)
     F_0 = f_0
     # plot(x=df_data['Time'], y=df_data['Channel A'], title='Raw Signal Data')
-
     t, x = denoise(df_data)
-
-    # t, x = envelope_detection(t, x, F_0)
-
+    t, x = envelope_detection(t, x, F_0)
     # plot(x=t, y=np.abs(x), title='After envelope detection')
     return t, x
 
