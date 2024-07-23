@@ -1,0 +1,11 @@
+# Pico setup constants
+SIZE_OF_ONE_BUFFER = 500
+NUM_OF_BUFFERS_TO_CAPTURE = 50
+CARRIER_FREQ = 6e5
+CHANNEL_RANGE = 3
+
+# sending AM signal
+TIME_PER_SYMBOL = 0.0001  # seconds
+SAMPLES_PER_SIN = 8
+
+BITS_PER_SYMBOL = 2

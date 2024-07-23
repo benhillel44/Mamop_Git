@@ -127,10 +127,10 @@ def run_fit_sin(measurement_):
 
 if __name__ == "__main__":
     # ======= you can modify the parameters bellow
-    measurement = 11
+    measurement = 12
     save_sin_fit_graphs = False
     is_channelA_milli = True
-    is_channelB_milli = False
+    is_channelB_milli = True
     # ============================================
 
     file_dir = constants.PATH_TO_EXTRACTED_MEASUREMENTS + f'measurement_{measurement}'

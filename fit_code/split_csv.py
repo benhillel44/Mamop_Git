@@ -37,8 +37,8 @@ if __name__ == "__main__":
     to the directory - ../measurements/extracted_measurements/measurement_{THE MEASUREMENT NUM YOU ENTERED}
     """
     # ======= you can modify the parameters bellow
-    measurement = 11
-    zip_name = "measurement_11.zip"
+    measurement = 12
+    zip_name = "measurement_12.zip"
     # ============================================
 
     # ================== do not change if you are not rafa =====================================

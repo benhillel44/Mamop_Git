@@ -4,7 +4,7 @@ import plotly.graph_objects as go
 
 def fft(x, y) -> (np.ndarray, np.ndarray):
     yf = np.fft.fft(y)
-    freq = np.fft.fftfreq(len(y), x.iloc[2]-x.iloc[1])
+    freq = np.fft.fftfreq(len(y), x[2]-x[1])
     return freq, yf
 
 

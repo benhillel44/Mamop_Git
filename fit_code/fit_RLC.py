@@ -73,10 +73,11 @@ def RLC_model_with_knowen_LC(x, R_L, L):
     """
     # TODO - dont forget to update this
     LC = 5.047458080518233e-12
-
+    R = 1.5
     return np.sqrt(
         (R_L**2 + ((L*x) / (1 - LC*(x**2)))**2)
         / ((R_1 +R_L)**2 + ((L*x) / (1 - LC*(x**2)))**2)
+
     )
 def find_LC(x, y):
     # calculate the impedance of the coil
@@ -107,7 +108,7 @@ def main(filename):
 
     # (2,2) define bounds and fit the parameters
     lower_bounds = [0,0] # bounds for R_L, L
-    upper_bounds = [10, 5e-3] # bounds for R_L, L
+    upper_bounds = [10, 5e-2] # bounds for R_L, L
     params, covariance = curve_fit(RLC_model_with_knowen_LC, x_data, y_data,
                                    bounds=(lower_bounds, upper_bounds))
 
@@ -135,7 +136,7 @@ def main(filename):
     plt.show()
 
 if __name__ == '__main__':
-    measurement = 9
+    measurement = 12
     filename = f"measurement_{measurement}.csv"
     main(filename)
 

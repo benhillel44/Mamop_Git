@@ -1,6 +1,6 @@
 import numpy as np
 import plotly.graph_objects as go
-from utils import *
+from .utils import *
 from scipy.signal import find_peaks
 
 class AdaptiveASKDecoder:
@@ -24,7 +24,7 @@ class AdaptiveASKDecoder:
         dx = np.abs(dx)
         # plot(x=t, y=dx, title="dx (derivative)")
 
-        n_avr = 100
+        n_avr = 300
         dx = np.convolve(dx, np.ones(n_avr) / n_avr, 'valid')
 
         # find the largest value in dx and filter values above  max / n_symbols
@@ -37,7 +37,7 @@ class AdaptiveASKDecoder:
         n_avr = int(n_avr / 2)
         dx = np.convolve(dx, np.ones(n_avr) / n_avr, 'valid')
 
-        # plot(x=t, y=dx, title="dx after running average")
+        plot(x=t, y=dx, title="dx after running average")
 
         # find main peaks
         peaks, _ = find_peaks(dx, width=n_avr)
