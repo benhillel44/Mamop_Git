@@ -1,6 +1,8 @@
 import numpy as np
 from constants import *
 
+import TransmitterReciever.Demodulation.utils as utils
+
 def create_symbol_array(binary_str, bits_per_symbol):
     """
     Creates a symbol array from a binary string.
@@ -57,7 +59,9 @@ def ask_modulate(binary_str, bits_per_symbol, wanted_sin_frequency=6e5):
     padding_length = padded_sample_count - sample_count
 
     times = np.linspace(0, max_time, num=sample_count, endpoint=False)
-    padded_times = np.linspace(0, max_time, num=padded_sample_count, endpoint=False)
+    padding_time = padding_length/fs
+    total_time = max_time + padding_time
+    padded_times = np.linspace(0, total_time, num=padded_sample_count, endpoint=False)
 
     padding_array = np.zeros(padding_length)
     sampled_symbol_array = np.array([symbols[int(t // TIME_PER_SYMBOL)] for t in times])
@@ -69,7 +73,14 @@ def ask_modulate(binary_str, bits_per_symbol, wanted_sin_frequency=6e5):
 
     # Modulate carrier with symbols
     result = raw_signal * carrier_wave
-    pico_freq = 1 / max_time
+    pico_freq = 1 / total_time
+    print("Max time: ", max_time)
+    print("total time: ", total_time)
+
+    utils.plot(padded_times, raw_signal, title= "Raw signal")
+    # utils.plot(times, sampled_symbol_array, title= "unpaded Raw signal")
+    # utils.plot(padded_times, result, title= "result")
+
     print("pico freq should be", pico_freq, "Hz")
     return result, pico_freq
 

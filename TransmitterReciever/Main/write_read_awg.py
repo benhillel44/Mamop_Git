@@ -221,17 +221,4 @@ class PicoSender:
 
 
 
-import TransmitterReciever.Demodulation.preprocces as preprocess
-from TransmitterReciever.Demodulation.demodulator import AdaptiveASKDecoder
-
-pico_sender = PicoSender()
-binary_string = "111110101100011010001000"
-pico_sender.send(binary_string)
-t, x = pico_sender.receive()
-t, x = preprocess.run_preprocess_list(t, x, CARRIER_FREQ)
-pico_sender.stop()
-
-decoder = AdaptiveASKDecoder(0.1, 2**BITS_PER_SYMBOL)
-code = decoder.decode(t, x)
-print(code)
 

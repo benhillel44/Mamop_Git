@@ -28,6 +28,13 @@ def HPF(t, x, f_min) -> (np.ndarray, np.ndarray):
     denoised_x = ifft(fx).real
     return t, denoised_x
 
+def Gaussian_BPF(t, x, f_c, sigma):
+    freq, fx = fft(t, x)
+    gaus = np.exp(-((freq - f_c)**2 / (2.0*sigma**2)))
+    fx *= gaus
+    # plot(x=freq, y=fx.real, title='FFT of the Channel A over Time', x_axsis_range=[-800, 800])
+    new_x = ifft(fx).real
+    return t, new_x
 
 def plot(x: np.ndarray, y: np.ndarray, title: str,
          x_axsis_range=None , y_axsis_range=None,

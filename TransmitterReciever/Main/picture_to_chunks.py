@@ -1,8 +1,7 @@
 import cv2
 import numpy as np
+from constants import *
 
-CHUNK_SIZE = 10
-IMAGE_SIZE = (640, 480)
 
 # function that returns a picture taken by the camera when a button is pressed
 def take_picture():
